@@ -1,7 +1,6 @@
 # Ambientes
 .env
 .venv/
-.anac/git
 .anac/
 __pycache__/
 *.pyc

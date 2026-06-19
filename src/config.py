@@ -13,4 +13,6 @@ ENCODINGS = [
     "utf-8",
     "latin-1",
     "cp1252",
+    "iso-8859-1",
+    "iso-8859-15",
 ]

@@ -2,4 +2,8 @@ duckdb==1.5.4
 pandas==3.0.3
 chardet==7.4.3
 pip==24.0
-dotenv==1.2.2
+dotenv==0.9.9
+dbt-core==1.7.9
+dbt-mysql==1.7.0
+mysql-connector-python==9.7.0
+SQLAlchemy==2.0.51

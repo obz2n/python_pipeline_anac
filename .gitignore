@@ -8,6 +8,7 @@ __pycache__/
 
 # Dados gerados em runtime
 data/raw/
+data/processed/
 data/warehouse/*.duckdb
 data/warehouse/*.duckdb.wal
 logs/

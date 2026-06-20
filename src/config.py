@@ -1,13 +1,21 @@
+from pathlib import Path
+
 # ========================
 # Diretórios
 # ========================
 
-DATA_RAW_DIR = "python_pipeline_anac/data/raw"
-DATA_PROCESSED_DIR = "python_pipeline_anac/data/processed"
-LOG_PATH = "python_pipeline_anac/logs/"
+DATA_RAW_PATH = Path("python_pipeline_anac/data/raw")
+DATA_PROCESSED_PATH = Path("python_pipeline_anac/data/processed")
+LOG_PATH = Path("python_pipeline_anac/logs/")
+GLOB_PATH = str(DATA_PROCESSED_PATH)
+
+TABLE_NAME = "voos"
+SCHEMA_NAME = "raw"
+CHUNKSIZE = 50_000  # linhas por batch no INSERT — evita estourar memória
 
 PATTERN_CSV = "*.csv"
 PATTERN_TXT = "*.txt"
+PATTERN_PARQUET = "*.parquet"
 
 ENCODINGS = [
     "utf-8",

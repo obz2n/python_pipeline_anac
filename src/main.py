@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from config import LOG_PATH
-from extraction import acessar_dados, extrair_dados
+from extract import acessar_dados, extrair_dados
 
 # ============================================================
 # Configuração de logging centralizada
@@ -46,26 +46,13 @@ logger = logging.getLogger(__name__)
 # ============================================================
 # Pipeline
 # ============================================================
-
-
 def main():
     logger.info("Iniciando execução do pipeline.")
 
     # Etapa 1: Extração
     logger.info("Iniciando extração de dados.")
-    arquivos = acessar_dados()
-    chunks = extrair_dados(arquivos, chunk_size=1000)
-    logger.info(
-        "Extração concluída. Chunks gerados: %d",
-        len(chunks) if chunks is not None else 0,
-    )
-
-    # Etapa 2: Carregamento (placeholder)
-    logger.info("Iniciando carregamento de dados.")
-    # TODO: implementar lógica de carregamento
-    logger.info("Carregamento concluído.")
-
-    logger.info("Pipeline concluído.")
+    extrair_dados(acessar_dados(), chunk_size=1000)
+    logger.info("Extração concluída.")
 
 
 if __name__ == "__main__":

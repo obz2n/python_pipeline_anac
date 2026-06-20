@@ -11,8 +11,10 @@ PATTERN_TXT = "*.txt"
 
 ENCODINGS = [
     "utf-8",
+    "utf-8-sig",  # UTF-8 com BOM — comum em exports do Excel
+    "cp1252",  # Windows-1252 — padrão em sistemas Windows BR
+    "iso-8859-1",  # Latin-1 — arquivos legados
+    "cp860",  # MS-DOS Portuguese
     "latin-1",
-    "cp1252",
-    "iso-8859-1",
-    "iso-8859-15",
+    "utf-16",
 ]

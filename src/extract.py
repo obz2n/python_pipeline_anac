@@ -15,8 +15,6 @@ logger = logging.getLogger(__name__)
 # ============================================================
 # Extração de dados
 # ============================================================
-
-
 def acessar_dados():
     """Retorna a lista de arquivos que casam com os padrões configurados.
 
@@ -43,6 +41,29 @@ def acessar_dados():
     return arquivos
 
 
+def detectar_encoding(file_path: str, amostra_bytes: int = 50_000) -> str:
+    """
+    Detecta o encoding do arquivo usando chardet.
+    Lê apenas os primeiros `amostra_bytes` bytes para ser eficiente em arquivos grandes.
+    Retorna o encoding detectado ou 'utf-8' como padrão seguro.
+    """
+    with open(file_path, "rb") as f:
+        amostra = f.read(amostra_bytes)
+
+    resultado = chardet.detect(amostra)
+    encoding = resultado.get("encoding") or "utf-8"
+    confianca = resultado.get("confidence", 0)
+
+    logger.debug(f"  Encoding detectado: '{encoding}' (confiança: {confianca:.0%})")
+
+    # Se confiança baixa, usa cp1252 como padrão seguro para arquivos BR
+    if confianca < 0.7:
+        logger.debug("Confiança baixa — usando 'cp1252' como fallback seguro")
+        return "cp1252"
+
+    return encoding
+
+
 def separar_chunks(df, chunk_size):
     """Divide um DataFrame em pedaços (chunks) de tamanho chunk_size.
 
@@ -54,30 +75,8 @@ def separar_chunks(df, chunk_size):
     return chunks
 
 
-def tentar_ler_csv(path, encodings):
-    """Tenta ler um CSV usando várias codificações em fallback.
-
-    Retorna o DataFrame lido ou levanta a última exceção se todas falharem.
-    """
-    last_exc = None
-    for enc in encodings:
-        try:
-            logger.debug("Tentando ler %s com encoding=%s", path, enc)
-            df = pd.read_csv(path, encoding=enc)
-            return df
-        except Exception as e:
-            logger.debug("Falha ao ler %s com encoding=%s: %s", path, enc, e)
-            last_exc = e
-    # Se chegou aqui, re-raise para o chamador lidar
-    raise last_exc
-
-
 def extrair_dados(arquivos, chunk_size=1000):
-    """Extrai os dados de uma lista de arquivos e retorna a lista de chunks.
-
-    Para cada arquivo tenta detectar a codificação com chardet e faz fallback
-    para encodings comuns se a leitura falhar.
-    """
+    """Extrai os dados de uma lista de arquivos e retorna a lista de chunks."""
     logger.info(
         "Iniciando extração de %d arquivo(s).", len(arquivos) if arquivos else 0
     )
@@ -90,46 +89,12 @@ def extrair_dados(arquivos, chunk_size=1000):
     for arquivo in arquivos:
         logger.info("Processando arquivo: %s", arquivo)
         try:
-            # Detect encoding
-            with open(arquivo, "rb") as f:
-                raw = f.read()
-            resultado = chardet.detect(raw)
-            enc = resultado.get("encoding")
-            logger.info(
-                "Codificação detectada para %s: %s (confiança=%.2f)",
-                arquivo,
-                enc,
-                resultado.get("confidence", 0.0),
-            )
-
-            # Lista de encodings para tentar: detectada primeiro, depois fallbacks
-            tried_encodings = [enc] if enc else []
-            for fallback in ("utf-8", "latin1", "cp1252"):
-                if fallback not in tried_encodings:
-                    tried_encodings.append(fallback)
-
-            df = tentar_ler_csv(arquivo, tried_encodings)
-
-            logger.info(
-                "Dados lidos de %s: %d linhas, %d colunas",
-                arquivo,
-                df.shape[0],
-                df.shape[1],
-            )
-            logger.debug("Colunas: %s", df.columns.tolist())
+            df = pd.read_csv(arquivo, encoding="utf-8")
 
             chunks = separar_chunks(df, chunk_size)
-            logger.info(
-                "Gerados %d chunk(s) a partir de %s (chunk_size=%d)",
-                len(chunks),
-                arquivo,
-                chunk_size,
-            )
             all_chunks.extend(chunks)
-        except Exception:
-            logger.exception("Erro ao processar o arquivo: %s", arquivo)
-            # Continua para o próximo arquivo em vez de falhar todo o pipeline
-            continue
+        except Exception as e:
+            logger.error("Falha ao processar %s: %s", arquivo, e)
 
     logger.info("Extração finalizada. Total de chunks gerados: %d", len(all_chunks))
     return all_chunks

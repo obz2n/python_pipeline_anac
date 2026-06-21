@@ -6,6 +6,8 @@ Pipeline ELT automatizado para processar arquivos de dados da ANAC (Agência Nac
 
 ```
 python_pipeline_anac/
+├── docs/                 # Documentação do projeto
+├── scripts/              # Scripts auxiliares
 ├── src/
 │   ├── main.py           # Orquestração do pipeline
 │   ├── extract.py        # Extração e conversão para Parquet
@@ -182,8 +184,7 @@ cp .env.example .env
 
 ## Próximos Passos
 
-- [ ] Paralelizar processamento de múltiplos arquivos
-- [ ] Adicionar validação de schema
+- [ ] Criar camada de transformação com DBT
 - [ ] Implementar deduplicação
 - [ ] Adicionar testes unitários
 - [ ] Documentação em SQL (views, procedures)
@@ -193,6 +194,6 @@ cp .env.example .env
 
 Para dúvidas ou problemas, consulte os logs em `logs/anac.log`.
 
-## Licença
+## Autor
 
-MIT
+[Juliano Laurentino](https://www.linkedin.com/in/julianolaurentinodasilva/)

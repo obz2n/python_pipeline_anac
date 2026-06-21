@@ -1,16 +1,18 @@
 # ========================
 # Diretórios
 # ========================
-
 DATA_RAW_PATH = "python_pipeline_anac/data/raw"
 DATA_PROCESSED_PATH = "python_pipeline_anac/data/processed"
 LOG_PATH = "python_pipeline_anac/logs/"
 GLOB_PATH = str(DATA_PROCESSED_PATH)
 
-TABLE_NAME = "voos"
-SCHEMA_NAME = "raw"
 CHUNKSIZE = 50_000  # linhas por batch no INSERT — evita estourar memória
 
+# ========================
+# Banco de dados
+# ========================
+SCHEMA_NAME_RAW = "raw"
+TABLE_NAME_RAW = "raw_anac"
 PATTERN_CSV = "*.csv"
 PATTERN_TXT = "*.txt"
 PATTERN_PARQUET = "*.parquet"

@@ -1,15 +1,10 @@
-import logging
 from pathlib import Path
 
 import chardet
 import duckdb
 import pandas as pd
 from config import DATA_PROCESSED_PATH, ENCODINGS
-
-# ============================================================
-# Logger do módulo
-# ============================================================
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 # ============================================================
@@ -29,7 +24,7 @@ def detectar_encoding(file_path: Path, amostra_bytes: int = 50_000) -> str:
         encoding = resultado.get("encoding") or "utf-8"
         confianca = resultado.get("confidence", 0)
 
-        logger.info(f"  Encoding detectado: '{encoding}' (confiança: {confianca:.0%})")
+        logger.debug(f"  Encoding detectado: '{encoding}' (confiança: {confianca:.0%})")
 
         # Se confiança baixa, usa cp1252 como padrão seguro para arquivos BR
         if confianca < 0.7:
@@ -59,7 +54,7 @@ def ler_arquivo_txt(file_path: Path) -> pd.DataFrame | None:
             file_path, sep=";", encoding=encoding_detectado, low_memory=False
         )
         logger.info(
-            f"  Lido com sucesso ({len(df):,} linhas, {len(df.columns)} colunas)"
+            f"  ✓ Lido com sucesso ({len(df):,} linhas, {len(df.columns)} colunas)"
         )
         return df
     except UnicodeDecodeError:
@@ -75,9 +70,7 @@ def ler_arquivo_txt(file_path: Path) -> pd.DataFrame | None:
             continue  # já tentou
         try:
             df = pd.read_csv(file_path, sep=";", encoding=encoding, low_memory=False)
-            logger.info(
-                f"  Lido com sucesso usando fallback '{encoding}' ({len(df):,} linhas)"
-            )
+            logger.info(f"  ✓ Lido com fallback '{encoding}' ({len(df):,} linhas)")
             return df
         except UnicodeDecodeError:
             logger.debug(f"  UnicodeDecodeError com '{encoding}'")
@@ -88,20 +81,22 @@ def ler_arquivo_txt(file_path: Path) -> pd.DataFrame | None:
 
     # Se chegou aqui, falhou com todos os encodings
     logger.error(
-        f"  Falha: não foi possível ler '{file_path.name}' com nenhum encoding testado"
+        f"  ✗ Falha: não foi possível ler '{file_path.name}' com nenhum encoding testado"
     )
     return None
 
 
-def processar_arquivos_txt(txt_files: list[Path] | list[str]) -> dict:
+def processar_arquivos_txt(txt_files: list[Path] | list[str]) -> dict[str, int | list]:
     """
     Orquestra a leitura de todos os .txt e a conversão para .parquet.
     Arquivos com falha são registrados e ignorados sem interromper o processo.
     Usa DuckDB para salvar em formato Parquet (mais eficiente para arquivos grandes).
 
-    Retorna um dicionário com estatísticas: {'sucessos': int, 'falhas': int, 'falhos': list}
+    Retorna um dicionário com estatísticas:
+        {'sucessos': int, 'falhas': int, 'falhos': list[str]}
     """
-    DATA_PROCESSED_PATH.mkdir(parents=True, exist_ok=True)
+    data_processed = Path(DATA_PROCESSED_PATH)
+    data_processed.mkdir(parents=True, exist_ok=True)
 
     total = len(txt_files)
     sucessos = 0
@@ -122,15 +117,15 @@ def processar_arquivos_txt(txt_files: list[Path] | list[str]) -> dict:
 
         # Salvar como Parquet usando DuckDB
         parquet_name = file_path.stem + ".parquet"
-        parquet_path = DATA_PROCESSED_PATH / parquet_name
+        parquet_path = data_processed / parquet_name
 
         try:
             # Converter DataFrame pandas para DuckDB e salvar como Parquet
             duckdb.from_df(df).write_parquet(str(parquet_path))
-            logger.info(f"  Salvo em: {parquet_path.name}")
+            logger.info(f"  ✓ Salvo em: {parquet_path.name}")
             sucessos += 1
         except Exception as e:
-            logger.error(f"  Erro ao salvar parquet '{parquet_name}': {e}")
+            logger.error(f"  ✗ Erro ao salvar parquet '{parquet_name}': {e}")
             falhas.append(file_path.name)
 
     # Resumo final
@@ -156,12 +151,13 @@ def carregar_parquet_duckdb(parquet_path: Path) -> duckdb.DuckDBPyRelation | Non
     Útil para análises e transformações sem carregar tudo na memória.
     """
     try:
-        logger.info(f"Carregando Parquet com DuckDB: {parquet_path.name}")
+        logger.debug(f"Carregando Parquet com DuckDB: {parquet_path.name}")
         relacao = duckdb.read_parquet(str(parquet_path))
         logger.info(
-            f"  Carregado: {relacao.shape[0]:,} linhas, {len(relacao.columns)} colunas"
+            f"  ✓ Carregado: {relacao.shape[0]:,} linhas, {len(relacao.columns)} colunas"
         )
+        logger.debug(f"  ✓ Total de linhas: {relacao.shape[0]:,}")
         return relacao
     except Exception as e:
-        logger.error(f"Erro ao carregar {parquet_path.name}: {e}")
+        logger.error(f"  ✗ Erro ao carregar {parquet_path.name}: {e}")
         return None

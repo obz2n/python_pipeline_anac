@@ -1,9 +1,26 @@
-duckdb==1.5.4
-pandas==3.0.3
-chardet==7.4.3
-pip==24.0
-dotenv==0.9.9
-dbt-core==1.7.9
-dbt-mysql==1.7.0
-mysql-connector-python==9.7.0
-SQLAlchemy==2.0.51
+# Manipulação de dados
+pandas==2.2.0
+numpy==1.26.4
+
+# Detecção de encoding
+chardet==5.2.0
+
+# Processamento de Parquet
+duckdb==0.9.2
+pyarrow==14.0.1
+
+# Banco de dados
+sqlalchemy==2.0.23
+pymysql==1.1.0
+
+# Variáveis de ambiente
+python-dotenv==1.0.0
+
+# Logging avançado
+loguru==0.7.2
+
+# Development
+# pytest==7.4.3
+# black==23.12.1
+# isort==5.13.2
+# flake8==6.1.0

@@ -83,11 +83,17 @@ def criar_engine() -> sqlalchemy.Engine:
 def criar_schema_se_nao_existe(engine: sqlalchemy.Engine, schema: str) -> None:
     """
     Cria o schema no banco de dados se não existir.
+
+    Parâmetros:
+    - engine: SQLAlchemy Engine configurado
+    - schema: nome do schema a criar
+
+    Lança:
+    - Exception se não conseguir criar o schema
     """
     try:
-        with engine.connect() as conn:
+        with engine.begin() as conn:
             conn.execute(sqlalchemy.text(f"CREATE SCHEMA IF NOT EXISTS `{schema}`"))
-            conn.commit()
             logger.info(f"✓ Schema '{schema}' criado/verificado com sucesso")
     except Exception as e:
         logger.error(f"✗ Erro ao criar schema '{schema}': {e}")
@@ -183,11 +189,12 @@ def carregar_parquets_unificado(
                             break
 
                         # Inserir chunk no MySQL com transação explícita
+                        linhas_chunk = len(chunk_df)
                         logger.debug(
-                            f"      Batch {batch_num}: inserindo {len(chunk_df):,} linhas..."
+                            f"      Batch {batch_num}: inserindo {linhas_chunk:,} linhas..."
                         )
 
-                        # Usar begin() para transação explícita
+                        # Usar begin() para transação explícita e automática
                         with engine.begin() as conn:
                             chunk_df.to_sql(
                                 table,
@@ -195,11 +202,11 @@ def carregar_parquets_unificado(
                                 schema=schema,
                                 if_exists="append",
                                 index=False,
-                                method=None,  # Sem method específico, usa padrão (mais seguro)
+                                method=None,
                             )
 
-                        linhas_arquivo += len(chunk_df)
-                        total_linhas_inseridas += len(chunk_df)
+                        linhas_arquivo += linhas_chunk
+                        total_linhas_inseridas += linhas_chunk
                         offset += chunk_size
                         batch_num += 1
 
@@ -207,8 +214,10 @@ def carregar_parquets_unificado(
                         logger.error(
                             f"      ✗ Erro ao processar batch {batch_num}: {chunk_error}"
                         )
-                        # Log do erro mas continua com próximo batch
-                        logger.warning(f"      ⚠️  Continuando com próximo batch...")
+                        # Skip batch com erro e continua
+                        logger.warning(
+                            f"      ⚠️  Pulando batch {batch_num} (erro na inserção)"
+                        )
                         offset += chunk_size
                         batch_num += 1
 
@@ -222,6 +231,7 @@ def carregar_parquets_unificado(
 
         except Exception as e:
             logger.error(f"  ✗ Erro ao processar {file_path.name}: {e}")
+            logger.debug(f"  Stack trace:", exc_info=True)
             falhas += 1
             continue
 

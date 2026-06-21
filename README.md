@@ -60,7 +60,7 @@ PORT=PORTA
 DATABASE=seu_db
 ```
 
-**⚠️ IMPORTANTE:** Nunca commite o arquivo `.env` com dados reais! Ele está no `.gitignore`.
+**IMPORTANTE:** Nunca commite o arquivo `.env` com dados reais! Ele está no `.gitignore`.
 
 ## Uso
 
@@ -155,7 +155,7 @@ cp .env.example .env
 
 ### Erro: "ValueError: Cannot parse retention from: '3'"
 **Solução:** Use `retention=3` (inteiro) em vez de `retention="3"` (string)
-- ✅ Já corrigido na versão atual
+- Já corrigido na versão atual
 
 ### Erro: "UnicodeDecodeError"
 **Solução:** O pipeline testa múltiplos encodings automaticamente. Se falhar:
@@ -176,7 +176,7 @@ cp .env.example .env
 
 ## Segurança
 
-⚠️ **IMPORTANTE:**
+**IMPORTANTE:**
 - Nunca commite `.env` com credenciais reais
 - Use variáveis de ambiente em produção
 - Considere usar secrets management (AWS Secrets, HashiCorp Vault)

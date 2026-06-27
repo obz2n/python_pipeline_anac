@@ -1,10 +1,10 @@
 version: 2
 
 sources:
-  - name: raw
-    schema: raw
+  - name: bronze
+    schema: bronze
     tables:
-      - name: raw_anac
+      - name: bronze_anac
         description: "Dados de Microdados diretamente da ANAC"
         columns:
           - name: Date

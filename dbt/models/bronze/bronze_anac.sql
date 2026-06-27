@@ -3,4 +3,4 @@
 
 -- Expor os dados brutos da tabela raw.raw_anac (source name: 'raw')
 select *
-from {{ source('raw', 'raw_anac') }}
+from {{ source('bronze', 'bronze_anac') }}

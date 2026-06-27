@@ -1,0 +1,421 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: raw_anac
+        description: "Dados de Microdados diretamente da ANAC"
+        columns:
+          - name: Date
+            description: "Data da observação"
+          - name: id_basica
+            description: "Código numérico identificador da etapa básica no sistema"
+          - name: id_empresa
+            description: "Código numérico identificador da empresa no sistema"
+          - name: sg_empresa_icao
+            description: "Sigla ICAO da empresa aérea. Refere-se ao designador da empresa de transporte aéreo obtido junto à OACI (Organização da Aviação Civil Internacional). "
+          - name: sg_empresa_iata
+            description: "Sigla IATA da empresa aérea. Refere-se ao designador da empresa de transporte aéreo obtido junto à IATA (Associação Internacional de Transporte Aéreo). "
+          - name: nm_empresa
+            description: "Nome da empresa aérea."
+          - name: nm_pais
+            description: "Nome do país da nacionalidade da empresa aérea."
+          - name: ds_tipo_empresa
+            description: "Descrição do tipo de empresa. Refere-se à descrição do tipo de empresa em relação ao serviço realizado. Pode conter as seguintes descrições. Essa variável está em desuso."
+          - name: nr_voo
+            description: "Número do voo. Refere-se ao número atribuído à operação de uma etapa ou de uma série de etapas registradas sob a mesma numeração de voo."
+          - name: nr_singular
+            description: "Singularidade do Voo. Refere-se ao conjunto de caracteres que auxilia na identificação do voo, composto de letras e números escolhidos a critério da própria empresa aérea."
+          - name: id_di
+            description: "Código numérico que referencia no sistema a variável Dígito Identificador"
+          - name: cd_di
+            description: "Dígito Identificador. Refere-se ao caractere utilizado para identificar o tipo de autorização para cada etapa de voo, assumindo os seguintes valores:"
+          - name: ds_di
+            description: "Descrição DI. Apresenta a descrição correspondente ao Dígito Identificador."
+          - name: ds_grupo_di
+            description: "Descrição do grupo DI ou Tipo de Voo. Refere-se ao agrupamento das classificações de DI em tipos de operações:"
+          - name: dt_referencia
+            description: "Data de Referência. Corresponde à Data Prevista de Início do Voo."
+          - name: nr_ano_referencia
+            description: "Ano de Referência."
+          - name: nr_semestre_referencia
+            description: "Número do semestre de referência."
+          - name: nm_semestre_referencia
+            description: "Nome do semestre de referência."
+          - name: nr_trimestre_referencia
+            description: "Número do trimestre de referência."
+          - name: nm_trimestre_referencia
+            description: "Nome do trimestre de referência."
+          - name: nr_mes_referencia
+            description: "Número do mês de referência."
+          - name: nm_mes_referencia
+            description: "Nome do mês de referência."
+          - name: nr_semana_referencia
+            description: "Número da semana de referência."
+          - name: nm_dia_semana_referencia
+            description: "Nome do dia da semana de referência."
+          - name: nr_dia_referencia
+            description: "Número do dia de referência."
+          - name: nr_ano_mes_referencia
+            description: "Número representando o ano e o mês de referência, no formato AAAAMM."
+          - name: id_tipo_linha
+            description: "Código numérico identificador do tipo de linha no sistema."
+          - name: cd_tipo_linha
+            description: "Caractere que identifica o tipo de linha. O Tipo de Linha identifica o tipo de operação realizada no voo"
+          - name: ds_tipo_linha
+            description: "Descrição do tipo de linha."
+          - name: ds_natureza_tipo_linha
+            description: "Descrição da natureza referente ao tipo de linha (Internacional/Doméstica). Considera a natureza do voo, não apenas da etapa."
+          - name: ds_servico_tipo_linha
+            description: "Descrição do serviço referente ao tipo de linha (Passageiro/Cargueiro)."
+          - name: ds_natureza_etapa
+            description: "Descrição da natureza da etapa de voo (Internacional/Doméstica)."
+          - name: hr_partida_real
+            description: "Horário de partida do voo, apurado pelo critério do calço e descalço."
+          - name: dt_partida_real
+            description: "Data de realização. Refere-se à data completa de decolagem da etapa, apurada pelo critério do calço e descalço."
+          - name: nr_ano_partida_real
+            description: "Número do ano de partida real."
+          - name: nr_semestre_partida_real
+            description: "Número do semestre de partida real."
+          - name: nm_semestre_partida_real
+            description: "Nome do semestre de partida real."
+          - name: nr_trimestre_partida_real
+            description: "Número do trimestre de partida real."
+          - name: nm_trimestre_partida_real
+            description: "Nome do trimestre de partida real."
+          - name: nr_mes_partida_real
+            description: "Número do mês de partida real."
+          - name: nm_mes_partida_real
+            description: "Nome do mês de partida real."
+          - name: nr_semana_partida_real
+            description: "Número da semana de partida real."
+          - name: nm_dia_semana_partida_real
+            description: "Nome do dia da semana de partida real."
+          - name: nr_dia_partida_real
+            description: "Número do dia de partida real."
+          - name: nr_ano_mes_partida_real
+            description: "Número que representa o ano e o mês de partida real, no formato AAAAMM."
+          - name: id_aerodromo_origem
+            description: "Código identificador do aeródromo de origem no sistema."
+          - name: sg_icao_origem
+            description: "Sigla ICAO do aeródromo de origem."
+          - name: sg_iata_origem
+            description: "Sigla IATA do aeródromo de origem."
+          - name: nm_aerodromo_origem
+            description: "Nome do aeródromo de origem."
+          - name: nm_municipio_origem
+            description: "Nome do município de origem."
+          - name: sg_uf_origem
+            description: "Sigla da Unidade Federativa de origem."
+          - name: nm_regiao_origem
+            description: "Nome da região de origem."
+          - name: nm_pais_origem
+            description: "Nome do país de origem."
+          - name: nm_continente_origem
+            description: "Nome do continente de origem."
+          - name: nr_etapa
+            description: "Número da etapa. Indica a sequência do aeródromo de origem entre os aeródromos sob o mesmo número de voo."
+          - name: hr_chegada_real
+            description: "Horário de chegada do voo, apurado pelo critério do calço e descalço."
+          - name: dt_chegada_real
+            description: "Data real de chegada."
+          - name: nr_ano_chegada_real
+            description: "Número do ano de chegada real."
+          - name: nr_semestre_chegada_real
+            description: "Número do semestre de chegada real."
+          - name: nm_semestre_chegada_real
+            description: "Nome do semestre de chegada real."
+          - name: nr_trimestre_chegada_real
+            description: "Número do trimestre de chegada real."
+          - name: nm_trimestre_chegada_real
+            description: "Nome do trimestre de chegada real."
+          - name: nr_mes_chegada_real
+            description: "Número do mês de chegada real."
+          - name: nm_mes_chegada_real
+            description: "Nome do mês de chegada real."
+          - name: nr_semana_chegada_real
+            description: "Número da semana de chegada real."
+          - name: nm_dia_semana_chegada_real
+            description: "Nome do dia da semana de chegada real."
+          - name: nr_dia_chegada_real
+            description: "Número do dia de chegada real."
+          - name: nr_ano_mes_chegada_real
+            description: "Número que representa o ano e o mês de chegada real, no formato AAAAMM."
+          - name: id_equipamento
+            description: "Código identificador do modelo da aeronave no sistema."
+          - name: sg_equipamento_icao
+            description: "Designador ICAO do modelo da aeronave"
+          - name: ds_modelo
+            description: "Descrição do modelo da aeronave."
+          - name: ds_matricula
+            description: "Marca de matrícula da aeronave."
+          - name: id_aerodromo_destino
+            description: "Código identificador do aeródromo de destino no sistema."
+          - name: sg_icao_destino
+            description: "Sigla ICAO do aeródromo de destino."
+          - name: sg_iata_destino
+            description: "Sigla IATA do aeródromo de destino."
+          - name: nm_aerodromo_destino
+            description: "Nome do aeródromo de destino."
+          - name: nm_municipio_destino
+            description: "Nome do município de destino."
+          - name: sg_uf_destino
+            description: "Sigla da Unidade Federativa de destino."
+          - name: nm_regiao_destino
+            description: "Nome da região de destino."
+          - name: nm_pais_destino
+            description: "Nome do país de destino."
+          - name: nm_continente_destino
+            description: "Nome do continente de destino."
+          - name: nr_escala_destino
+            description: "Sequência de escala de destino. É o número correspondente ao aeródromo de destino da etapa, considerando a numeração sequencial dos aeródromos percorridos sob um mesmo voo."
+          - name: lt_combustivel
+            description: "Quantidade de combustível consumida, expressa em litros."
+          - name: nr_assentos_ofertados
+            description: "Número de assentos disponíveis na etapa do voo."
+          - name: kg_payload
+            description: "Capacidade Payload, expressa em quilogramas."
+          - name: km_distancia
+            description: "Distância, expressa em quilômetros, entre os aeródromos de origem e destino da etapa, considerando a curvatura do planeta terra."
+          - name: nr_passag_pagos
+            description: "Número de passageiros que ocupam assentos comercializados ao público e que geram receita, com a compra de assentos, para a empresa de transporte aéreo."
+          - name: nr_passag_gratis
+            description: "Número de passageiros que ocupam assentos comercializados ao público, mas não geram receita, com a compra de assentos, para a empresa de transporte aéreo."
+          - name: kg_bagagem_livre
+            description: "Bagagem franqueada. É toda bagagem que não é considerada como excesso, expressa em quilogramas."
+          - name: kg_bagagem_excesso
+            description: "Excesso de bagagem. É a quantidade total de bagagem que excede o limite de peso acordado entre a empresa aérea e o passageiro (adquirido antes ou depois da compra do bilhete), verificada no momento do despacho, expressa em quilogramas."
+          - name: kg_carga_paga
+            description: "Carga paga. É a quantidade total, expressa em quilogramas, de todos os bens que tenham sido transportados na aeronave, exceto correio e bagagem, e tenham gerado receita direta ou indireta para a empresa aérea."
+          - name: kg_carga_gratis
+            description: "Quantidade total, expressa em quilogramas, de todos os bens que tenham sido transportados na aeronave, exceto correio e bagagem, e não tenha gerado receitas diretas ou indiretas para a empresa aérea."
+          - name: kg_correio
+            description: "Quantidade, expressa em quilogramas, de objetos transportados para atender aos operadores designados oficialmente pelo país para operar serviços postais e cumprir com as obrigações associadas decorrentes dos Atos da Universal Postal Union (UPU)"
+          - name: nr_decolagem
+            description: "Número de decolagens."
+          - name: nr_horas_voadas
+            description: "Número de horas voadas."
+          - name: kg_peso
+            description: "Refere-se ao peso total carregado pela aeronave, calculado pela soma de carga, correio, passageiros e bagagem, expressos em kg. O peso dos passageiros transportados é calculado multiplicando-se a quantidade total de passageiros por 75, para empresas brasileiras. No caso das empresas estrangeiras, que não enviam dados de bagagem à ANAC, o peso total de passageiros e bagagens é estimado multiplicando-se a quantidade total de passageiros por 90."
+          - name: nr_velocidade_media
+            description: "Velocidade média do voo, calculada a partir da distância e da duração do voo, expressa em km/h."
+          - name: nr_pax_gratis_km
+            description: "Representa, para cada etapa básica, o produto entre a quantidade de passageiros grátis e a distância da etapa."
+          - name: nr_carga_paga_km
+            description: "Refere-se ao produto entre a quantidade de carga paga (kg) e a distância da etapa básica (km)."
+          - name: nr_carga_gratis_km
+            description: "Refere-se ao produto entre a quantidade de carga grátis (kg) e a distância da etapa básica (km)."
+          - name: nr_correio_km
+            description: "Refere-se ao produto entre a quantidade de correio (kg) e a distância da etapa básica (km)."
+          - name: nr_bagagem_paga_km
+            description: "Refere-se ao produto entre a quantidade de bagagem paga (kg) e a distância da etapa básica (km)."
+          - name: nr_bagagem_gratis_km
+            description: "Refere-se ao produto entre a quantidade de bagagem grátis (kg) e a distância da etapa básica (km)."
+          - name: nr_ask
+            description: "Refere-se ao volume de Assentos Quilômetros Oferecidos (Available Seat Kilometer). É calculado, em cada etapa básica, pelo produto entre o número de assentos oferecidos e a distância da etapa."
+          - name: nr_rpk
+            description: "Refere-se ao volume de Passageiros Quilômetros Transportados (Revenue Passenger Kilometer). É calculado, em cada etapa básica, pelo produto entre o número de passageiros pagos e a distância da etapa."
+          - name: nr_atk
+            description: "Refere-se ao volume de Toneladas Quilômetros Oferecidas (Available Tonne Kilometer), expresso em (ton x km). É calculado, em cada etapa básica, pelo produto entre a Capacidade Payload (kg) e a distância da etapa, dividido por 1000."
+          - name: nr_rtk
+            description: "Refere-se ao volume de Toneladas Quilômetros Transportadas (Revenue Tonne Kilometer), expresso em (ton x km). É calculado, em cada etapa básica, pelo produto entre a quantidade, expressa em quilogramas, de passageiros, bagagem, carga e correio pagos transportada e a distância da etapa, dividido por 1000. Cada passageiro possui o peso estimado de 75kg, para empresas brasileiras. No caso das empresas estrangeiras, que não enviam dados de bagagem à ANAC, o peso total de passageiros e bagagens é estimado multiplicando-se a quantidade total de passageiros por 90."
+          - name: id_arquivo
+            description: "Código identificador do arquivo de dados enviado ao sistema."
+          - name: nm_arquivo
+            description: "Nome do arquivo enviado ao sistema."
+          - name: nr_linha
+            description: "Número da linha do arquivo na qual estão contidos os dados de cada etapa básica."
+          - name: dt_sistema
+            description: "Data em que as informações foram registradas no sistema."
+          - name: Etapa Combinada (On flight origin and destination - OFOD)
+            description: "As etapas combinadas identificam os pares de origem, onde ocorreu o embarque do objeto de transporte, e destino, onde ocorreu o desembarque do objeto de transporte, independentemente da existência de aeródromos intermediários, atendidos por determinado voo. É a etapa de voo vista com foco no objeto de transporte (pessoas e/ou cargas), com base no embarque e no desembarque nos aeródromos relacionados. Os dados estatísticos da etapa combinada informam a origem e destino dos passageiros e cargas transportadas no voo, independentemente das escalas realizadas."
+          - name: id_combinada
+            description: "Código numérico identificador da etapa combinada no sistema"
+          - name: id_empresa
+            description: "Código numérico identificador da empresa no sistema"
+          - name: sg_empresa_icao
+            description: "Sigla ICAO da empresa aérea. Refere-se ao designador da empresa de transporte aéreo obtido junto à OACI (Organização da Aviação Civil Internacional). "
+          - name: sg_empresa_iata
+            description: "Sigla IATA da empresa aérea. Refere-se ao designador da empresa de transporte aéreo obtido junto à IATA (Associação Internacional de Transporte Aéreo). "
+          - name: nm_empresa
+            description: "Nome da empresa aérea."
+          - name: nm_pais
+            description: "Nome do país da nacionalidade da empresa aérea."
+          - name: ds_tipo_empresa
+            description: "Descrição do tipo de empresa. Refere-se à descrição do tipo de empresa em relação ao serviço realizado. Pode conter as seguintes descrições. Essa variável está em desuso."
+          - name: ds_tipo_empresa_estrangeira
+            description: "Descrição do tipo de empresa estrangeira. Refere-se à descrição do tipo de empresa em relação ao serviço realizado. Pode conter as seguintes descrições. Essa variável está em desuso."
+          - name: ds_tipo_empresa_estrangeira
+            description: "Descrição do tipo de empresa estrangeira. Refere-se à descrição do tipo de empresa em relação ao serviço realizado. Pode conter as seguintes descrições. Essa variável está em desuso."
+          - name: nr_voo
+            description: "Número do voo. Refere-se ao número atribuído à operação de uma etapa ou de uma série de etapas registradas sob a mesma numeração de voo."
+          - name: nr_singular
+            description: "Singularidade do Voo. Refere-se ao conjunto de caracteres que auxilia na identificação do voo, composto de letras e números escolhidos a critério da própria empresa aérea."
+          - name: id_di
+            description: "Código numérico que referencia ao sistema a variável Dígito Identificador"
+          - name: cd_di
+            description: "Dígito Identificador. Refere-se ao caractere utilizado para identificar o tipo de autorização para cada etapa de voo, assumindo os seguintes valores:"
+          - name: ds_di
+            description: "Descrição do Dígito Identificador. Refere-se à descrição correspondente ao Dígito Identificador apresentado."
+          - name: ds_di_etapa
+            description: "Descrição da Etapa do Dígito Identificador. Refere-se à descrição correspondente à etapa do Dígito Identificador apresentado."
+          - name: ds_di
+            description: "Descrição DI. Apresenta a descrição correspondente ao Dígito Identificador apresentado."
+          - name: ds_grupo_di
+            description: "Descrição do grupo DI ou Tipo de Voo. Refere-se ao agrupamento das classificações de DI em tipos de operações"
+          - name: dt_referencia
+            description: "Data de Referência. Corresponde à Data Prevista de Início do Voo."
+          - name: nr_ano_referencia
+            description: "Ano de Referência."
+          - name: nr_semestre_referencia
+            description: "Número do semestre de referência."
+          - name: nm_semestre_referencia
+            description: "Nome do semestre de referência."
+          - name: nr_trimestre_referencia
+            description: "Número do trimestre de referência."
+          - name: nm_trimestre_referencia
+            description: "Nome do trimestre de referência."
+          - name: nr_mes_referencia
+            description: "Número do mês de referência."
+          - name: nm_mes_referencia
+            description: "Nome do mês de referência."
+          - name: nr_semana_referencia
+            description: "Número da semana de referência."
+          - name: nm_dia_semana_referencia
+            description: "Nome do dia da semana de referência."
+          - name: nr_dia_referencia
+            description: "Número do dia de referência."
+          - name: nr_ano_mes_referencia
+            description: "Número representando o ano e o mês de referência, no formato AAAAMM."
+          - name: id_tipo_linha
+            description: "Código numérico identificador do tipo de linha no sistema."
+          - name: cd_tipo_linha
+            description: "Caractere que identifica o tipo de linha. O Tipo de Linha identifica o tipo de operação realizada no voo."
+          - name: ds_tipo_linha
+            description: "Descrição do tipo de linha."
+          - name: ds_natureza_tipo_linha
+            description: "Descrição da natureza referente ao tipo de linha (Internacional/Doméstica). Considera a natureza do voo, não apenas da etapa."
+          - name: ds_servico_tipo_linha
+            description: "Descrição do serviço referente ao tipo de linha (Passageiro/Cargueiro)."
+          - name: ds_natureza_etapa
+            description: "Descrição da natureza da etapa de voo (Intenacional/Doméstica)."
+          - name: hr_partida_real
+            description: "Horário de partida do voo, apurado pelo critério do calço e descalço."
+          - name: dt_partida_real
+            description: "Data de realização. Refere-se à data completa de decolagem da etapa, apurada pelo critério do calço e descalço."
+          - name: nr_ano_partida_real
+            description: "Número do ano de partida real."
+          - name: nr_semestre_partida_real
+            description: "Número do semestre de partida real."
+          - name: nm_semestre_partida_real
+            description: "Nome do semestre de partida real."
+          - name: nr_trimestre_partida_real
+            description: "Número do trimestre de partida real."
+          - name: nm_trimestre_partida_real
+            description: "Nome do trimestre de partida real."
+          - name: nr_mes_partida_real
+            description: "Número do mês de partida real."
+          - name: nm_mes_partida_real
+            description: "Nome do mês de partida real."
+          - name: nr_semana_partida_real
+            description: "Número da semana de partida real."
+          - name: nm_dia_semana_partida_real
+            description: "Nome do dia da semana de partida real."
+          - name: nr_dia_partida_real
+            description: "Número do dia de partida real."
+          - name: nr_ano_mes_partida_real
+            description: "Número que representa o ano e o mês de partida real, no formato AAAAMM."
+          - name: id_aerodromo_origem
+            description: "Código identificador do aeródromo de origem no sistema."
+          - name: sg_icao_origem
+            description: "Sigla ICAO do aeródromo de origem."
+          - name: sg_iata_origem
+            description: "Sigla IATA do aeródromo de origem."
+          - name: nm_aerodromo_origem
+            description: "Nome do aeródromo de origem."
+          - name: nm_municipio_origem
+            description: "Nome do município de origem."
+          - name: sg_uf_origem
+            description: "Sigla da Unidade Federativa de origem."
+          - name: nm_regiao_origem
+            description: "Nome da região de origem."
+          - name: nm_pais_origem
+            description: "Nome do país de origem."
+          - name: nm_continente_origem
+            description: "Nome do continente de origem."
+          - name: nr_etapa
+            description: "Número da etapa. Indica a sequência do aeródromo de origem entre os aeródromos sob o mesmo número de voo."
+          - name: hr_chegada_real
+            description: "Horário de chegada do voo, apurado pelo critério do calço e descalço."
+          - name: dt_chegada_real
+            description: "Data real de chegada."
+          - name: nr_ano_chegada_real
+            description: "Número do ano de chegada real."
+          - name: nr_semestre_chegada_real
+            description: "Número do semestre de chegada real."
+          - name: nm_semestre_chegada_real
+            description: "Nome do semestre de chegada real."
+          - name: nr_trimestre_chegada_real
+            description: "Número do trimestre de chegada real."
+          - name: nm_trimestre_chegada_real
+            description: "Nome do trimestre de chegada real."
+          - name: nr_mes_chegada_real
+            description: "Número do mês de chegada real."
+          - name: nm_mes_chegada_real
+            description: "Nome do mês de chegada real."
+          - name: nr_semana_chegada_real
+            description: "Número da semana de chegada real."
+          - name: nm_dia_semana_chegada_real
+            description: "Nome do dia da semana de chegada real."
+          - name: nr_dia_chegada_real
+            description: "Número do dia de chegada real."
+          - name: nr_ano_mes_chegada_real
+            description: "Número que representa o ano e o mês de chegada real, no formato AAAAMM."
+          - name: id_aerodromo_destino
+            description: "Código identificador do aeródromo de destino no sistema."
+          - name: sg_icao_destino
+            description: "Sigla ICAO do aeródromo de destino."
+          - name: sg_iata_destino
+            description: "Sigla IATA do aeródromo de destino."
+          - name: nm_aerodromo_destino
+            description: "Nome do aeródromo de destino."
+          - name: nm_municipio_destino
+            description: "Nome do município de destino."
+          - name: sg_uf_destino
+            description: "Sigla da Unidade Federativa de destino."
+          - name: nm_regiao_destino
+            description: "Nome da região de destino."
+          - name: nm_pais_destino
+            description: "Nome do país de destino."
+          - name: nm_continente_destino
+            description: "Nome do continente de destino."
+          - name: nr_escala_destino
+            description: "Sequência de escala de destino. É o número correspondente ao aeródromo de destino da etapa, considerando a numeração sequencial dos aeródromos percorridos sob um mesmo voo."
+          - name: cd_cotran
+            description: "Caractere que representa o Cotran (Código de Transporte). O Cotran é utilizado para informar o tipo de desembarque realizado pelo objeto de transporte (passageiro, carga ou correio), informando sobre a realização ou não de conexões"
+          - name: ds_cotran
+            description: "Descrição do Cotran (Código de Transporte)."
+          - name: nr_passag_pagos
+            description: "Número de passageiros que ocupam assentos comercializados ao público e que geram receita, com a compra de assentos, para a empresa de transporte aéreo."
+          - name: nr_passag_gratis
+            description: "Número de passageiros que ocupam assentos comercializados ao público mas não geram receita, com a compra de assentos, para a empresa de transporte aéreo."
+          - name: kg_bagagem_livre
+            description: "Bagagem franqueada. É toda bagagem que não é considerada como excesso, expressa em quilogramas."
+          - name: kg_bagagem_excesso
+            description: "Excesso de bagagem. É a quantidade total de bagagem que excede o limite de peso acordado entre a empresa aérea e o passageiro (adquirido antes ou depois da compra do bilhete), verificada no momento do despacho, expressa em quilogramas."
+          - name: kg_carga_paga
+            description: "Carga paga. É a quantidade total, expressa em quilogramas, de todos os bens que tenham sido transportados na aeronave, exceto correio e bagagem, e tenham gerado receita direta ou indireta para a empresa aérea."
+          - name: kg_carga_gratis
+            description: "Quantidade total, expressa em quilogramas, de todos os bens que tenham sido transportados na aeronave, exceto correio e bagagem, e não tenha gerado receitas diretas ou indiretas para a empresa aérea."
+          - name: kg_correio
+            description: "Quantidade, expressa em quilogramas, de objetos transportados para atender aos operadores designados oficialmente pelo país para operar serviços postais e cumprir com as obrigações associadas decorrentes dos Atos da Universal Postal Union (UPU)."
+          - name: id_arquivo
+            description: "Código identificador do arquivo de dados enviado ao sistema."
+          - name: nm_arquivo
+            description: "Nome do arquivo enviado ao sistema."
+          - name: nr_linha
+            description: "Número da linha do arquivo na qual estão contidos os dados de cada etapa básica."
+          - name: dt_sistema
+            description: "Data em que as informações foram registradas no sistema."

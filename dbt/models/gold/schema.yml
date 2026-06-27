@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: gold_pontualidade
+    description: >
+      Métricas de realização agregadas por empresa, rota, aeroporto e período (ano/mês).
+      Indica volume de voos em diferentes estados: realizados (chegaram), em voo (saíram mas não chegaram),
+      programados (ainda não saíram). Wide table pronta para consumo direto em BI.
+    columns:
+      - name: taxa_realizacao_pct
+        description: "Percentual de voos realizados (chegada confirmada) sobre o total de voos"
+
+      - name: taxa_em_voo_pct
+        description: "Percentual de voos em voo (partida confirmada, chegada pendente)"
+
+      - name: taxa_programado_pct
+        description: "Percentual de voos ainda programados (sem partida confirmada)"
+
+      - name: total_voos
+        description: "Total de voos no período"
+        tests:
+          - not_null
+
+  - name: gold_volume_periodo
+    description: >
+      Volume de voos por mês/trimestre e região de origem, com variação percentual
+      em relação ao mês anterior — útil para análise de sazonalidade.
+    columns:
+      - name: variacao_pct_mes_anterior
+        description: "Variação percentual do volume de voos comparado ao mês anterior (mesma região)"
+
+      - name: total_voos
+        description: "Volume total de voos no período"
+        tests:
+          - not_null
+
+  - name: gold_ranking_rotas_atrasadas
+    description: >
+      Ranking das rotas por volume de voos em voo (saiu mas não chegou ainda).
+      Considera apenas rotas com volume mínimo de 30 voos no período para evitar
+      distorção estatística.
+    columns:
+      - name: ranking_volume_em_voo
+        description: "Posição no ranking de volume em voo — 1 é a rota com maior volume pendente"
+        tests:
+          - not_null
+
+      - name: taxa_em_voo_pct
+        description: "Percentual de voos em voo (pendentes de chegada) sobre o total da rota"

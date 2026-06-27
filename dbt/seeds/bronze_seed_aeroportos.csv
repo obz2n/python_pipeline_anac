@@ -1,0 +1,45 @@
+icao_aerodromo,nome_aeroporto,cidade,estado,uf,regiao
+SBGR,Aeroporto Internacional de Guarulhos,Guarulhos,São Paulo,SP,Sudeste
+SBSP,Aeroporto de Congonhas,São Paulo,São Paulo,SP,Sudeste
+SBKP,Aeroporto de Viracopos,Campinas,São Paulo,SP,Sudeste
+SBGL,Aeroporto Internacional do Galeão,Rio de Janeiro,Rio de Janeiro,RJ,Sudeste
+SBRJ,Aeroporto Santos Dumont,Rio de Janeiro,Rio de Janeiro,RJ,Sudeste
+SBBR,Aeroporto Internacional de Brasília,Brasília,Distrito Federal,DF,Centro-Oeste
+SBCF,Aeroporto de Confins,Belo Horizonte,Minas Gerais,MG,Sudeste
+SBPL,Aeroporto da Pampulha,Belo Horizonte,Minas Gerais,MG,Sudeste
+SBPA,Aeroporto Salgado Filho,Porto Alegre,Rio Grande do Sul,RS,Sul
+SBCT,Aeroporto Afonso Pena,Curitiba,Paraná,PR,Sul
+SBSV,Aeroporto de Salvador,Salvador,Bahia,BA,Nordeste
+SBRF,Aeroporto dos Guararapes,Recife,Pernambuco,PE,Nordeste
+SBFZ,Aeroporto Pinto Martins,Fortaleza,Ceará,CE,Nordeste
+SBEG,Aeroporto Eduardo Gomes,Manaus,Amazonas,AM,Norte
+SBBE,Aeroporto Val de Cans,Belém,Pará,PA,Norte
+SBGO,Aeroporto Santa Genoveva,Goiânia,Goiás,GO,Centro-Oeste
+SBVT,Aeroporto Eurico de Aguiar Salles,Vitória,Espírito Santo,ES,Sudeste
+SBFL,Aeroporto Hercílio Luz,Florianópolis,Santa Catarina,SC,Sul
+SBCY,Aeroporto Marechal Rondon,Cuiabá,Mato Grosso,MT,Centro-Oeste
+SBTE,Aeroporto Senador Petrônio Portela,Teresina,Piauí,PI,Nordeste
+SBSL,Aeroporto Marechal Cunha Machado,São Luís,Maranhão,MA,Nordeste
+SBMO,Aeroporto Zumbi dos Palmares,Maceió,Alagoas,AL,Nordeste
+SBAR,Aeroporto Santa Maria,Aracaju,Sergipe,SE,Nordeste
+SBJP,Aeroporto Castro Pinto,João Pessoa,Paraíba,PB,Nordeste
+SBNT,Aeroporto Augusto Severo,Natal,Rio Grande do Norte,RN,Nordeste
+SBSG,Aeroporto Internacional de São Gonçalo do Amarante,São Gonçalo do Amarante,Rio Grande do Norte,RN,Nordeste
+SBPV,Aeroporto Governador Jorge Teixeira,Porto Velho,Rondônia,RO,Norte
+SBRB,Aeroporto Presidente Médici,Rio Branco,Acre,AC,Norte
+SBBV,Aeroporto Atlas Brasil Cantanhede,Boa Vista,Roraima,RR,Norte
+SBMQ,Aeroporto Internacional de Macapá,Macapá,Amapá,AP,Norte
+SBCG,Aeroporto Internacional de Campo Grande,Campo Grande,Mato Grosso do Sul,MS,Centro-Oeste
+SBUL,Aeroporto de Uberlândia,Uberlândia,Minas Gerais,MG,Sudeste
+SBPJ,Aeroporto de Palmas,Palmas,Tocantins,TO,Norte
+SBPF,Aeroporto Lauro Kurtz,Passo Fundo,Rio Grande do Sul,RS,Sul
+SBJU,Aeroporto Orlando Bezerra de Menezes,Juazeiro do Norte,Ceará,CE,Nordeste
+SBIZ,Aeroporto de Imperatriz,Imperatriz,Maranhão,MA,Nordeste
+SBPK,Aeroporto Major Brigadeiro Trompowsky,Foz do Iguaçu,Paraná,PR,Sul
+SBJV,Aeroporto Lauro Carneiro de Loyola,Joinville,Santa Catarina,SC,Sul
+SBLO,Aeroporto Governador José Richa,Londrina,Paraná,PR,Sul
+SBMG,Aeroporto Comandante Gustavo Kraemer,Maringá,Paraná,PR,Sul
+SBVC,Aeroporto de Vitória da Conquista,Vitória da Conquista,Bahia,BA,Nordeste
+SBPS,Aeroporto de Porto Seguro,Porto Seguro,Bahia,BA,Nordeste
+SBIL,Aeroporto de Ilhéus,Ilhéus,Bahia,BA,Nordeste
+SBPN,Aeroporto Senador Nilo Coelho,Petrolina,Pernambuco,PE,Nordeste

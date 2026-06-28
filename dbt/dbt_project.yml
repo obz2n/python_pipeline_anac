@@ -17,6 +17,10 @@ test-paths: ["tests"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
+# Para customizar o proprio documento DBT
+# Criar um diretório "docs" e adicionar arquivos Markdown chamado homepage.md
+# no cabeçalho do arquivo, adicionar  {% docs _overview_ %} e no final {% enddocs %}
+# docs-paths: ["docs"]
 
 clean-targets: # directories to be removed by `dbt clean`
   - "target"

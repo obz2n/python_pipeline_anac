@@ -1,0 +1,31 @@
+version: 2
+
+seeds:
+  - name: bronze_seed_aeroportos
+    description: "Dados de aeroportos brasileiros com informações geográficas para enriquecimento de dados ANAC"
+    columns:
+      - name: icao_aerodromo
+        description: "Código ICAO do aeroporto (chave primária)"
+        tests:
+          - not_null
+          - unique
+      - name: nome_aeroporto
+        description: "Nome oficial do aeroporto"
+        tests:
+          - not_null
+      - name: cidade
+        description: "Cidade onde se localiza o aeroporto"
+        tests:
+          - not_null
+      - name: estado
+        description: "Estado (nome completo) onde se localiza o aeroporto"
+        tests:
+          - not_null
+      - name: uf
+        description: "Sigla UF (ex: SP, RJ, MG)"
+        tests:
+          - not_null
+      - name: regiao
+        description: "Região geográfica do Brasil (Norte, Nordeste, Centro-Oeste, Sudeste, Sul)"
+        tests:
+          - not_null

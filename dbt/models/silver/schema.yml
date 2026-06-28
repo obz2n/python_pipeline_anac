@@ -12,15 +12,17 @@ models:
         tests:
           - not_null
 
-      - name: numero_voo
+      - name: nr_voo
         description: "Número do voo atribuído pela companhia aérea"
+        tests:
+          - not_null
 
-      - name: icao_aerodromo_origem
+      - name: sg_icao_origem
         description: "Código ICAO do aeroporto de origem"
         tests:
           - not_null
 
-      - name: icao_aerodromo_destino
+      - name: sg_icao_destino
         description: "Código ICAO do aeroporto de destino"
         tests:
           - not_null
@@ -28,36 +30,76 @@ models:
       - name: flag_situacao
         description: "Status do voo: realizado (chegada efetivada), em_voo (saiu mas não chegou) ou programado (ainda não saiu)"
         tests:
+          - not_null
           - accepted_values:
               values: ["realizado", "em_voo", "programado"]
 
       - name: rota
         description: "Rota concatenada no formato 'ORIGEM -> DESTINO'"
-
-      - name: origem_regiao
-        description: "Região geográfica do aeroporto de origem (enriquecimento via seed)"
-
-      - name: destino_regiao
-        description: "Região geográfica do aeroporto de destino (enriquecimento via seed)"
+        tests:
+          - not_null
 
       - name: ano
         description: "Ano extraído de dt_referencia (data prevista)"
+        tests:
+          - not_null
 
       - name: mes
         description: "Mês extraído de dt_referencia (data prevista)"
+        tests:
+          - not_null
 
       - name: dia
         description: "Dia extraído de dt_referencia (data prevista)"
+        tests:
+          - not_null
 
       - name: dt_referencia_ts
         description: "Data prevista de início do voo em formato timestamp"
-
-seeds:
-  - name: bronze_seed_aeroportos
-    description: "Tabela de referência ICAO → cidade/estado/região dos aeroportos brasileiros"
-    columns:
-      - name: icao_aerodromo
-        description: "Código ICAO de 4 letras do aeroporto"
         tests:
-          - unique
           - not_null
+
+      - name: nr_passag_pagos
+        description: "Número de passageiros que pagaram pela passagem"
+
+      - name: nr_passag_gratis
+        description: "Número de passageiros que viajaram gratuitamente"
+
+      - name: kg_carga_paga
+        description: "Quantidade de carga paga em quilogramas"
+
+      - name: kg_carga_gratis
+        description: "Quantidade de carga grátis em quilogramas"
+
+      - name: origem_cidade
+        description: "Cidade do aeroporto de origem (enriquecimento via seed)"
+
+      - name: origem_estado
+        description: "Estado do aeroporto de origem (enriquecimento via seed)"
+
+      - name: origem_uf_seed
+        description: "Sigla UF do estado do aeroporto de origem (enriquecimento via seed)"
+
+      - name: origem_regiao_seed
+        description: "Região geográfica do aeroporto de origem (enriquecimento via seed)"
+
+      - name: origem_nome_aeroporto
+        description: "Nome do aeroporto de origem (enriquecimento via seed)"
+
+      - name: destino_cidade
+        description: "Cidade do aeroporto de destino (enriquecimento via seed)"
+
+      - name: destino_estado
+        description: "Estado do aeroporto de destino (enriquecimento via seed)"
+
+      - name: destino_uf_seed
+        description: "Sigla UF do estado do aeroporto de destino (enriquecimento via seed)"
+
+      - name: destino_regiao_seed
+        description: "Região geográfica do aeroporto de destino (enriquecimento via seed)"
+
+      - name: destino_nome_aeroporto
+        description: "Nome do aeroporto de destino (enriquecimento via seed)"
+
+      - name: source_file
+        description: "Nome do arquivo Parquet de origem (rastreabilidade)"

@@ -27,9 +27,11 @@ clean-targets: # directories to be removed by `dbt clean`
 
 models:
   dbt_mariadb:
-    # Camada Silver: views dos dados da ANAC
+    # Camada Silver: tabelas transformadas
     silver:
       +materialized: table
-    # Camada Gold: tabelas agregadas para BI
+      +schema: silver
+    # Camada Gold: views agregadas para BI
     gold:
-      +materialized: table
+      +materialized: view
+      +schema: gold

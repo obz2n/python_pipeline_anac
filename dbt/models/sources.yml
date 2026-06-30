@@ -2,6 +2,7 @@ version: 2
 
 sources:
   - name: bronze
+    database: postgres
     schema: bronze
     tables:
       - name: bronze_anac

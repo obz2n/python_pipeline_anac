@@ -1,12 +1,12 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: "dbt_mariadb"
+name: "dbt_postgres"
 version: "1.0.0"
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: "dbt_mariadb"
+profile: "dbt_postgres"
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -30,12 +30,12 @@ clean-targets: # directories to be removed by `dbt clean`
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 models:
-  dbt_mariadb:
-    # Camada Silver: tabelas transformadas
+  dbt_postgres:
+    # Camada Silver: tabelas transformadas (PostgreSQL)
     silver:
       +materialized: table
       +schema: silver
-    # Camada Gold: views agregadas para BI
+    # Camada Gold: tabelas agregadas para BI
     gold:
       +materialized: table
       +schema: gold

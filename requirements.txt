@@ -9,6 +9,10 @@ chardet==5.2.0
 duckdb==0.9.2
 pyarrow==14.0.1
 
+# dbt
+dbt-core==1.12.0b3
+dbt-postgres==1.10.2
+
 # Banco de dados
 sqlalchemy==2.0.23
 psycopg2-binary==2.9.12

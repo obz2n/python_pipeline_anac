@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.*.local
+profiles.yml
 
 # Python
 __pycache__/
@@ -36,6 +37,7 @@ ENV/
 env.bak/
 venv.bak/
 .anac/
+.user.yml
 
 # IDE
 .vscode/
@@ -51,7 +53,7 @@ logs/
 *.log.*
 
 # Data
-data/raw/*.txt
+data/bronze/*.txt
 data/processed/*.parquet
 
 # Testing
@@ -72,3 +74,7 @@ Thumbs.db
 *.tmp
 *.temp
 ~*
+
+# DBT
+dbt_packages/
+.dbt/

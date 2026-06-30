@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized = 'table'
-  )
-}}
-
 -- gold_ranking_rotas_atrasadas (MariaDB-compatible)
 -- Ranking das rotas por volume de voos em progresso (saiu mas não chegou).
 -- Filtra rotas com volume mínimo para evitar outliers de rotas pouco operadas.

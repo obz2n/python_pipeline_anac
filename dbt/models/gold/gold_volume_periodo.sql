@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized = 'table'
-  )
-}}
-
 -- gold_volume_periodo (MariaDB-compatible)
 -- Volume de voos por período (mês e trimestre), com variação percentual
 -- mês a mês — útil para identificar sazonalidade e tendências.

@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized = 'table'
-  )
-}}
-
 -- gold_pontualidade (MariaDB-compatible)
 -- Métricas de realização agregadas por empresa, rota, aeroporto e período.
 -- Wide table: cada linha traz todos os atributos necessários para BI,

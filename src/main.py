@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from config import DATA_PROCESSED_PATH, DATA_RAW_PATH, LOG_PATH
+from config import DATA_BRONZE_PATH, DATA_PROCESSED_PATH, LOG_PATH
 from extract import carregar_parquet_duckdb, processar_arquivos_txt
 from load import carregar_parquets_unificado, contar_registros, criar_engine
 from loguru import logger
@@ -68,11 +68,11 @@ def main():
         logger.info("Etapa 1: Extração de dados (txt -> parquet)")
         logger.info("-" * 70)
 
-        data_raw = Path(DATA_RAW_PATH)
-        txt_files = sorted(data_raw.glob("*.txt"))
+        data_bronze = Path(DATA_BRONZE_PATH)
+        txt_files = sorted(data_bronze.glob("*.txt"))
 
         if not txt_files:
-            logger.warning(f"Nenhum arquivo .txt encontrado em {str(data_raw)}")
+            logger.warning(f"Nenhum arquivo .txt encontrado em {str(data_bronze)}")
             logger.info("Pipeline interrompido: sem dados para processar.")
             return
 
@@ -164,7 +164,7 @@ def main():
         logger.info(f"Etapa 2 (Validação) : {parquets_validos} Parquets válidos")
         if stats_load is not None and stats_load["arquivos"] > 0:
             logger.info(
-                f"Etapa 3 (Carregamento): {stats_load['total_linhas']:,} linhas em raw.raw_anac"
+                f"Etapa 3 (Carregamento): {stats_load['total_linhas']:,} linhas em bronze.bronze_anac"
             )
 
     except Exception as e:

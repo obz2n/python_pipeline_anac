@@ -6,6 +6,7 @@ Pipeline ELT automatizado para processar arquivos de dados da ANAC (Agência Nac
 
 ```
 python_pipeline_anac/
+├── dbt/                  # Modelos DBT para transformação
 ├── docs/                 # Documentação do projeto
 ├── scripts/              # Scripts auxiliares
 ├── src/
@@ -15,7 +16,7 @@ python_pipeline_anac/
 │   ├── config.py         # Configurações globais
 │   └── __init__.py
 ├── data/
-│   ├── raw/              # Arquivos TXT originais (ANAC)
+│   ├── bronze/              # Arquivos TXT originais (ANAC)
 │   └── processed/        # Arquivos Parquet processados
 ├── logs/                 # Arquivos de log
 ├── .env                  # Variáveis de ambiente (não commitar)

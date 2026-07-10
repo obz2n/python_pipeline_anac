@@ -2,6 +2,8 @@
 
 Pipeline ELT automatizado para processar arquivos de dados da ANAC (Agência Nacional de Aviação Civil).
 
+![img](https://i.postimg.cc/XYggYxT1/Projeto-ANAC.png)
+
 ## Estrutura do Projeto
 
 ```
@@ -130,45 +132,6 @@ ENCODINGS = [...]   # Fallback de encodings a testar
 stats_load = carregar_raw(engine, limite=3)  # Carrega apenas 3 arquivos
 ```
 
-## Dependências
-
-- **pandas**: Manipulação de dados
-- **chardet**: Detecção de encoding
-- **duckdb**: Leitura eficiente de Parquet
-- **sqlalchemy**: ORM para banco de dados
-- **pymysql**: Driver MySQL
-- **dotenv**: Carregamento de variáveis de ambiente
-- **loguru**: Sistema de logging avançado
-
-Instale tudo com:
-```bash
-pip install pandas chardet duckdb sqlalchemy pymysql python-dotenv loguru
-```
-
-## Troubleshooting
-
-### Erro: "Key PASSWORD not found in .env"
-**Solução:** Crie arquivo `.env` com as credenciais:
-```bash
-cp .env.example .env
-# Edite .env com suas credenciais
-```
-
-### Erro: "ValueError: Cannot parse retention from: '3'"
-**Solução:** Use `retention=3` (inteiro) em vez de `retention="3"` (string)
-- Já corrigido na versão atual
-
-### Erro: "UnicodeDecodeError"
-**Solução:** O pipeline testa múltiplos encodings automaticamente. Se falhar:
-1. Verifique a encoding do arquivo original
-2. Adicione a encoding em `config.py` em `ENCODINGS`
-
-### Erro: "ConnectionError" ao conectar no BD
-**Solução:**
-1. Verifique se MySQL está rodando
-2. Verifique credenciais em `.env`
-3. Verifique host e porta (padrão: localhost:3306)
-
 ## Performance
 
 - **Arquivos pequenos** (< 100MB): Rápido
@@ -182,14 +145,6 @@ cp .env.example .env
 - Use variáveis de ambiente em produção
 - Considere usar secrets management (AWS Secrets, HashiCorp Vault)
 - Logs podem conter dados sensíveis - revise `logs/` regularmente
-
-## Próximos Passos
-
-- [ ] Criar camada de transformação com DBT
-- [ ] Implementar deduplicação
-- [ ] Adicionar testes unitários
-- [ ] Documentação em SQL (views, procedures)
-- [ ] Dashboard com métricas
 
 ## Suporte
 

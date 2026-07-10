@@ -1,0 +1,21 @@
+# =================================================================
+# Dockerfile.airflow
+# Imagem customizada do Airflow com Cosmos + dbt-postgres instalados.
+# =================================================================
+
+FROM apache/airflow:2.9.1-python3.12
+
+USER root
+
+# Dependências de sistema para psycopg2 e dbt
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+USER airflow
+
+# Instala Cosmos, dbt e dependências do projeto
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt

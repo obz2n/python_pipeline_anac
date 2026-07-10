@@ -1,4 +1,4 @@
--- gold_ranking_rotas_atrasadas (MariaDB-compatible)
+-- gold_ranking_rotas_atrasadas (PostgreSQL-compatible)
 -- Ranking das rotas por volume de voos em progresso (saiu mas não chegou).
 -- Filtra rotas com volume mínimo para evitar outliers de rotas pouco operadas.
 
@@ -15,12 +15,12 @@ agregado_rota as (
 
     select
         rota,
-        icao_aerodromo_origem,
+        sg_icao_origem,
         origem_cidade,
-        origem_uf,
-        icao_aerodromo_destino,
+        sg_uf_origem,
+        sg_icao_destino,
         destino_cidade,
-        destino_uf,
+        sg_uf_destino,
 
         count(*) as total_voos,
         SUM(CASE WHEN flag_situacao = 'em_voo' THEN 1 ELSE 0 END) as voos_em_voo,
@@ -28,8 +28,8 @@ agregado_rota as (
 
     from silver
     group by
-        rota, icao_aerodromo_origem, origem_cidade, origem_uf,
-        icao_aerodromo_destino, destino_cidade, destino_uf
+        rota, sg_icao_origem, origem_cidade, sg_uf_origem,
+        sg_icao_destino, destino_cidade, sg_uf_destino
 
     having count(*) >= {{ volume_minimo }}   -- ignora rotas com poucos voos
 

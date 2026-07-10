@@ -1,6 +1,6 @@
 {{ config(materialized = 'table') }}
 
--- silver_voos (MariaDB-compatible)
+-- silver_voos (PostgreSQL-compatible)
 -- Camada Silver: limpeza, tipagem e enriquecimento dos voos da ANAC.
 -- Usa dt_referencia como data de base para decomposição temporal.
 -- Dados enriquecidos com informações geográficas via seed_aeroportos.
@@ -18,8 +18,8 @@ datas_processadas as (
     src.*,
     -- Converter dt_referencia para timestamp
     case
-      when src.dt_referencia regexp '^[0-9]{2}/[0-9]{2}/[0-9]{4}$'
-        then str_to_date(src.dt_referencia, '%d/%m/%Y')
+      when src.dt_referencia ~ '^[0-9]{2}/[0-9]{2}/[0-9]{4}$'
+        then to_date(src.dt_referencia, 'DD/MM/YYYY')
       else null
     end as dt_referencia_ts
   from src
@@ -29,13 +29,13 @@ temporal_decomposition as (
   -- Decomposição temporal baseada em dt_referencia
   select
     datas_processadas.*,
-    year(datas_processadas.dt_referencia_ts) as ano,
-    month(datas_processadas.dt_referencia_ts) as mes,
-    day(datas_processadas.dt_referencia_ts) as dia,
-    quarter(datas_processadas.dt_referencia_ts) as trimestre,
-    (weekday(datas_processadas.dt_referencia_ts) + 1) as dia_semana_num,
-    date_format(datas_processadas.dt_referencia_ts, '%B') as nome_mes,
-    date_format(datas_processadas.dt_referencia_ts, '%W') as nome_dia_semana
+    extract(year from datas_processadas.dt_referencia_ts)::int as ano,
+    extract(month from datas_processadas.dt_referencia_ts)::int as mes,
+    extract(day from datas_processadas.dt_referencia_ts)::int as dia,
+    extract(quarter from datas_processadas.dt_referencia_ts)::int as trimestre,
+    extract(dow from datas_processadas.dt_referencia_ts)::int as dia_semana_num,
+    to_char(datas_processadas.dt_referencia_ts, 'Month') as nome_mes,
+    to_char(datas_processadas.dt_referencia_ts, 'Day') as nome_dia_semana
   from datas_processadas
 ),
 
@@ -48,11 +48,7 @@ situacao_voo as (
       when temporal_decomposition.dt_partida_real is not null then 'em_voo'
       else 'programado'
     end as flag_situacao,
-    concat(
-      temporal_decomposition.sg_icao_origem,
-      ' -> ',
-      temporal_decomposition.sg_icao_destino
-    ) as rota
+    temporal_decomposition.sg_icao_origem || ' -> ' || temporal_decomposition.sg_icao_destino as rota
   from temporal_decomposition
 )
 

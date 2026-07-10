@@ -1,4 +1,4 @@
--- gold_pontualidade (MariaDB-compatible)
+-- gold_pontualidade (PostgreSQL-compatible)
 -- Métricas de realização agregadas por empresa, rota, aeroporto e período.
 -- Wide table: cada linha traz todos os atributos necessários para BI,
 -- sem necessidade de joins adicionais.
@@ -13,15 +13,15 @@ with silver as (
 agregado as (
 
     select
-        icao_empresa_aerea,
-        icao_aerodromo_origem,
+        sg_empresa_icao,
+        sg_icao_origem,
         origem_cidade,
         origem_estado,
-        origem_regiao,
-        icao_aerodromo_destino,
+        nm_regiao_origem,
+        sg_icao_destino,
         destino_cidade,
         destino_estado,
-        destino_regiao,
+        nm_regiao_destino,
         rota,
         ano,
         mes,
@@ -33,8 +33,8 @@ agregado as (
 
     from silver
     group by
-        icao_empresa_aerea, icao_aerodromo_origem, origem_cidade, origem_estado, origem_regiao,
-        icao_aerodromo_destino, destino_cidade, destino_estado, destino_regiao,
+        sg_empresa_icao, sg_icao_origem, origem_cidade, origem_estado, nm_regiao_origem,
+        sg_icao_destino, destino_cidade, destino_estado, nm_regiao_destino,
         rota, ano, mes
 
 )

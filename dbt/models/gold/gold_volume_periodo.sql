@@ -1,4 +1,4 @@
--- gold_volume_periodo (MariaDB-compatible)
+-- gold_volume_periodo (PostgreSQL-compatible)
 -- Volume de voos por período (mês e trimestre), com variação percentual
 -- mês a mês — útil para identificar sazonalidade e tendências.
 
@@ -16,17 +16,17 @@ agregado_mensal as (
         mes,
         nome_mes,
         trimestre,
-        origem_regiao,
+        nm_regiao_origem,
 
         count(*) as total_voos,
         SUM(CASE WHEN flag_situacao = 'realizado' THEN 1 ELSE 0 END) as voos_realizados,
         SUM(CASE WHEN flag_situacao = 'em_voo' THEN 1 ELSE 0 END) as voos_em_voo,
         SUM(CASE WHEN flag_situacao = 'programado' THEN 1 ELSE 0 END) as voos_programados,
-        count(distinct icao_empresa_aerea) as qtd_empresas_ativas,
+        count(distinct sg_empresa_icao) as qtd_empresas_ativas,
         count(distinct rota) as qtd_rotas_ativas
 
     from silver
-    group by ano, mes, nome_mes, trimestre, origem_regiao
+    group by ano, mes, nome_mes, trimestre, nm_regiao_origem
 
 ),
 
@@ -37,7 +37,7 @@ com_variacao as (
 
         -- Volume do mesmo período no mês anterior (mesma região), para cálculo de variação
         lag(total_voos) over (
-            partition by origem_regiao
+            partition by nm_regiao_origem
             order by ano, mes
         ) as total_voos_mes_anterior
 

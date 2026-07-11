@@ -1,0 +1,20 @@
+# requirements-docker.txt
+# Dependências APENAS para o Docker (Airflow já tem a maioria)
+# A imagem apache/airflow:2.9.1 já inclui airflow + providers
+
+# Cosmos inclui dbt como dependência, então instalamos Cosmos e deixa ele resolver
+astronomer-cosmos[postgres]==1.4.0
+
+# Dados e parsing  
+pandas>=2.0.0
+pyarrow>=14.0.0
+chardet>=5.2.0
+
+# Database (psycopg2 pode vir via dependências, mas explicitamos)
+sqlalchemy>=2.0.0
+
+# Environment
+python-dotenv>=1.2
+
+# Logging
+loguru>=0.7.0

@@ -51,8 +51,8 @@ project_config = ProjectConfig(
 )
 
 profile_config = ProfileConfig(
-    profile_name="anac_pipeline",
-    target_name="prod",
+    profile_name="dbt_postgres",
+    target_name="dev",
     profile_mapping=PostgresUserPasswordProfileMapping(
         conn_id="postgres_anac",   # Connection cadastrada no Airflow (Admin → Connections)
         profile_args={
@@ -63,7 +63,7 @@ profile_config = ProfileConfig(
 
 execution_config = ExecutionConfig(
     execution_mode=ExecutionMode.LOCAL,   # roda dbt no mesmo processo do Airflow
-    dbt_executable_path=os.getenv("DBT_EXECUTABLE", "/usr/local/bin/dbt"),
+    dbt_executable_path=os.getenv("DBT_EXECUTABLE", "dbt"),  # usa PATH do sistema
 )
 
 
@@ -85,17 +85,19 @@ with DAG(
     # O Cosmos gera automaticamente uma task por modelo dbt,
     # na ordem correta de dependências definida pelos ref() e source()
     dbt_group = DbtTaskGroup(
-        group_id="dbt_anac",
-        project_config=project_config,
-        profile_config=profile_config,
-        execution_config=execution_config,
-        operator_args={
-            "install_deps": True,   # roda `dbt deps` antes do primeiro modelo
-        },
-        default_args={
-            "retries": 1,
-        },
-    )
+            group_id="dbt_anac",
+            project_config=project_config,
+            profile_config=profile_config,
+            execution_config=execution_config,
+            operator_args={
+                "install_deps": True,   # roda `dbt deps` antes do primeiro modelo
+                "full_refresh": False,  # não força rebuild — incremental por padrão
+            },
+            default_args={
+                "retries": 1,
+            },
+            select=["tag:production"],  # executa apenas modelos em produção (opcional)
+        )
 
     fim = EmptyOperator(task_id="fim")
 

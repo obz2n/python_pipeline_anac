@@ -1,20 +1,143 @@
+---
+# =================================================================
+# docker-compose.yml — ANAC Pipeline
+# Mesclado com o compose anterior (PostgreSQL na porta 5433).
+#
+# IMPORTANTE: o volume postgres_data existente é preservado.
+# Não rode `docker compose down -v` se já tiver dados carregados.
+# =================================================================
+
+x-airflow-common: &airflow-common
+  build:
+    context: .
+    dockerfile: infra/docker/Dockerfile.airflow
+  environment: &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    # Airflow usa o mesmo PostgreSQL — banco 'postgres' para metastore (compartilhado)
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    AIRFLOW__CORE__FERNET_KEY: "${AIRFLOW_FERNET_KEY:-FEqz77TJ0jBQq0Vvu2GhPr_hO0jL_HfhXCZI8K3NWHQ=}"
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
+    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
+    AIRFLOW__CORE__MIN_LOG_LEVEL: "INFO"
+    # Caminhos internos ao container
+    SCRIPTS_DIR: /opt/airflow/scripts
+    DATA_PATH:   /opt/airflow/data
+    DBT_PROJECT_DIR:  /opt/airflow/dbt
+    DBT_PROFILES_DIR: /opt/airflow/dbt
+    # Conexão com o DW — mesmas vars do compose anterior, sem defaults
+    POSTGRES_HOST:     postgres
+    POSTGRES_PORT:     "5432"      # porta INTERNA do container (sempre 5432)
+    POSTGRES_DB:       ${POSTGRES_DB}
+    POSTGRES_USER:     ${POSTGRES_USER}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./scripts:/opt/airflow/scripts
+    - ./dbt:/opt/airflow/dbt
+    - ./data:/opt/airflow/data
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+  depends_on:
+    postgres:
+      condition: service_healthy
+  networks:
+    - anac_net
+
 services:
-  # PostgreSQL service
+
+  # ── PostgreSQL ─────────────────────────────────────────────────
+  # Configuração original preservada — só adicionados healthcheck e network.
   postgres:
     image: postgres:16
     container_name: postgres
     restart: unless-stopped
-
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_USER:     ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-
+      POSTGRES_DB:       ${POSTGRES_DB}
     ports:
-      - "5433:5432"
-
+      - "5433:5432"    # porta externa 5433 preservada do compose anterior
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data        # volume existente preservado
+      - ./docker/init:/docker-entrypoint-initdb.d     # cria schemas bronze/silver/gold
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - anac_net
+
+  # ── Airflow Init ───────────────────────────────────────────────
+  airflow-init:
+    <<: *airflow-common
+    container_name: airflow_init
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        # Aguarda PostgreSQL estar prônto
+        sleep 5
+        airflow db migrate
+        airflow users create \
+          --username admin \
+          --password admin123 \
+          --firstname Admin \
+          --lastname User \
+          --role Admin \
+          --email admin@anac.local 2>/dev/null || echo "Usuario admin ja existe."
+        airflow connections add postgres_anac \
+          --conn-type postgres \
+          --conn-host postgres \
+          --conn-login ${POSTGRES_USER} \
+          --conn-password ${POSTGRES_PASSWORD} \
+          --conn-schema bronze \
+          --conn-port 5432 \
+          --conn-extra '{"sslmode": "disable"}' 2>/dev/null \
+                  || echo "Connection postgres_anac ja existe."
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_MIGRATE: "true"
+    restart: "no"
+
+  # ── Airflow Webserver ──────────────────────────────────────────
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: airflow_webserver
+    restart: unless-stopped
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  # ── Airflow Scheduler ──────────────────────────────────────────
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: airflow_scheduler
+    restart: unless-stopped
+    command: scheduler
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
 
 volumes:
-  postgres_data:
+  postgres_data:    # volume existente — dados preservados entre up/down
+
+networks:
+  anac_net:
+    driver: bridge

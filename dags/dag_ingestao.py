@@ -39,26 +39,34 @@ DEFAULT_ARGS = {
 
 def verificar_arquivo(**context) -> None:
     """
-    Verifica se existe pelo menos um arquivo .parquet em DATA_DIR.
+    Verifica se existe pelo menos um arquivo .csv ou .parquet em DATA_DIR.
     Falha a task se a pasta estiver vazia — evita rodar load sem dados.
     """
     import glob
+    import logging
 
-    arquivos = glob.glob(os.path.join(DATA_DIR, "*.parquet"))
+    logger = logging.getLogger(__name__)
+
+    # Procura por .csv (input) ou .parquet (se extract já foi rodado)
+    csvs = glob.glob(os.path.join(DATA_DIR, "*.csv"))
+    parquets = glob.glob(os.path.join(DATA_DIR, "*.parquet"))
+    arquivos = csvs + parquets
 
     if not arquivos:
         raise FileNotFoundError(
-            f"Nenhum arquivo .parquet encontrado em '{DATA_DIR}'.\n"
+            f"Nenhum arquivo .csv ou .parquet encontrado em '{DATA_DIR}'.\n"
             f"Coloque os CSVs da ANAC na pasta e rode o extract manualmente, "
             f"ou verifique o volume montado no docker-compose."
         )
 
-    print(f"Arquivos encontrados: {len(arquivos)}")
-    for f in arquivos:
-        print(f"  - {os.path.basename(f)}")
+    logger.info(f"Arquivos encontrados: {len(csvs)} CSVs, {len(parquets)} Parquets")
+    for f in csvs[:3]:  # mostra apenas os primeiros 3 para não poluir logs
+        logger.info(f"  CSV: {os.path.basename(f)}")
+    for f in parquets[:3]:
+        logger.info(f"  Parquet: {os.path.basename(f)}")
 
     # Passa a lista para as próximas tasks via XCom
-    context["ti"].xcom_push(key="parquet_files", value=arquivos)
+    context["ti"].xcom_push(key="input_files", value=arquivos)
 
 
 def executar_extract(**context) -> None:
@@ -102,12 +110,13 @@ with DAG(
 
     inicio = EmptyOperator(task_id="inicio")
 
-    verificar = PythonOperator(
+    verify = PythonOperator(
         task_id="verificar_arquivos",
         python_callable=verificar_arquivo,
         doc_md="""
-        Verifica se existem arquivos .parquet em DATA_DIR.
+        Verifica se existem arquivos .csv ou .parquet em DATA_DIR.
         Falha a pipeline antes de tentar carregar dados inexistentes.
+        Suporta CSVs originais ou Parquets pré-processados.
         """,
     )
 

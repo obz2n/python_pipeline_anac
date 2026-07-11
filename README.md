@@ -8,22 +8,25 @@ Pipeline ELT automatizado para processar arquivos de dados da ANAC (Agência Nac
 
 ```
 python_pipeline_anac/
-├── dbt/                  # Modelos DBT para transformação
-├── docs/                 # Documentação do projeto
-├── scripts/              # Scripts auxiliares
-├── src/
-│   ├── main.py           # Orquestração do pipeline
-│   ├── extract.py        # Extração e conversão para Parquet
-│   ├── load.py           # Carregamento em banco de dados
-│   ├── config.py         # Configurações globais
-│   └── __init__.py
-├── data/
-│   ├── bronze/              # Arquivos TXT originais (ANAC)
-│   └── processed/        # Arquivos Parquet processados
-├── logs/                 # Arquivos de log
-├── .env                  # Variáveis de ambiente (não commitar)
-├── requirements.txt      # Dependências Python
-└── README.md            # Este arquivo
+├── dags/                    # DAGs do Airflow
+│   ├── dag_ingestao.py      # Ingestão CSV → Parquet → Bronze
+│   └── dag_dbt.py           # Transformações Silver/Gold
+├── dbt/                     # Projeto dbt
+│   ├── dbt_project.yml
+│   ├── profiles.yml         # (configurado automaticamente)
+│   ├── models/
+│   │   ├── bronze/          # Source + documentação
+│   │   ├── silver/          # Limpeza e enriquecimento
+│   │   └── gold/            # Agregações para BI
+│   └── seeds/               # Dados de referência (aeroportos)
+├── scripts/                 # Scripts de ETL (Python)
+│   ├── extract.py           # Converte CSV → Parquet
+│   └── load.py              # Carrega Parquet → PostgreSQL
+├── data/                    # CSVs originais da ANAC
+├── logs/                    # Logs do Airflow
+├── docker-compose.yml       # Orquestração de containers
+└── infra/docker/
+    └── Dockerfile.airflow   # Imagem customizada com Cosmos + dbt
 ```
 
 ## Instalação

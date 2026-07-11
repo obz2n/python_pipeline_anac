@@ -1,36 +1,39 @@
-# Manipulação de dados
+#  Manipulação de dados
 pandas==2.2.0
 numpy==1.26.4
+pyarrow>=14.0.1          # backend Parquet para pandas e polars
 
 # Detecção de encoding
 chardet==5.2.0
-
-# Processamento de Parquet
-duckdb>=1.0.0
-pyarrow>=14.0.1
-
-# dbt
-dbt-core==1.12.0b3
-dbt-postgres==1.10.2
 
 # Banco de dados
 sqlalchemy==2.0.23
 psycopg2-binary==2.9.12
 
-# Variáveis de ambiente
-python-dotenv>=1.2
+# dbt
+# 1.9.x é o último stable sem o conflito de protobuf do 1.10+
+dbt-core==1.9.8
+dbt-postgres==1.9.1
 
-# Logging avançado
-loguru==0.7.2
-
-# Development
-# pytest==7.4.3
-# black==23.12.1
-# isort==5.13.2
-# flake8==6.1.0
+# Astronomer Cosmos
+# Cosmos 1.4.0 só suporta até dbt-core 1.8.x
+# CORRIGIDO: 1.8.0 é compatível com dbt-core 1.10.x
+astronomer-cosmos==1.8.0
 
 # Airflow providers
 apache-airflow-providers-postgres==5.10.0
 
-# Astronomer Cosmos (dbt → Airflow)
-astronomer-cosmos==1.4.0
+# Variáveis de ambiente
+python-dotenv==1.0.1     # CORRIGIDO: 1.2 não existe, versão estável é 1.0.1
+
+# Logging
+loguru==0.7.2
+
+# Processamento
+# duckdb>=1.0.0
+
+#  Development (descomente quando precisar)
+# pytest==7.4.3
+# black==23.12.1
+# isort==5.13.2
+# flake8==6.1.0

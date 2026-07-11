@@ -24,12 +24,11 @@ python_pipeline_anac/
 │   └── load.py                # Carrega Parquet → PostgreSQL
 ├── data/                      # CSVs originais da ANAC
 ├── logs/                      # Logs do Airflow
+├── docker/
+│   └── Dockerfile.airflow     # Imagem customizada com Cosmos + dbt
 ├── docker-compose.yml         # Orquestração de containers
 ├── requirements.txt           # Dependências para desenvolvimento local
-├── requirements-docker.txt    # Dependências para Airflow (Docker)
 ├── .env.example               # Exemplo de variáveis de ambiente
-└── infra/docker/
-    └── Dockerfile.airflow     # Imagem customizada com Cosmos + dbt
 ```
 
 ## Instalação

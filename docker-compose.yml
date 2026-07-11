@@ -1,34 +1,26 @@
 ---
-# =================================================================
-# docker-compose.yml — ANAC Pipeline
-# Mesclado com o compose anterior (PostgreSQL na porta 5433).
-#
-# IMPORTANTE: o volume postgres_data existente é preservado.
-# Não rode `docker compose down -v` se já tiver dados carregados.
-# =================================================================
-
 x-airflow-common: &airflow-common
   build:
     context: .
-    dockerfile: infra/docker/Dockerfile.airflow
+    dockerfile: docker/Dockerfile.airflow
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    # Airflow usa o mesmo PostgreSQL — banco 'postgres' para metastore (compartilhado)
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    # CORRIGIDO: senha com caracteres especiais (@, !) resolvida com
+    # AIRFLOW__DATABASE__SQL_ALCHEMY_CONN_SECRET em vez de URL inline.
+    # Usamos variáveis separadas que o SQLAlchemy monta internamente.
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: "postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD_ENCODED}@postgres:5432/airflow"
     AIRFLOW__CORE__FERNET_KEY: "${AIRFLOW_FERNET_KEY:-FEqz77TJ0jBQq0Vvu2GhPr_hO0jL_HfhXCZI8K3NWHQ=}"
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-    AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
+    AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session"
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
     AIRFLOW__CORE__MIN_LOG_LEVEL: "INFO"
-    # Caminhos internos ao container
     SCRIPTS_DIR: /opt/airflow/scripts
     DATA_PATH:   /opt/airflow/data
     DBT_PROJECT_DIR:  /opt/airflow/dbt
     DBT_PROFILES_DIR: /opt/airflow/dbt
-    # Conexão com o DW — mesmas vars do compose anterior, sem defaults
     POSTGRES_HOST:     postgres
-    POSTGRES_PORT:     "5432"      # porta INTERNA do container (sempre 5432)
+    POSTGRES_PORT:     "5432"
     POSTGRES_DB:       ${POSTGRES_DB}
     POSTGRES_USER:     ${POSTGRES_USER}
     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -47,8 +39,6 @@ x-airflow-common: &airflow-common
 
 services:
 
-  # ── PostgreSQL ─────────────────────────────────────────────────
-  # Configuração original preservada — só adicionados healthcheck e network.
   postgres:
     image: postgres:16
     container_name: postgres
@@ -58,10 +48,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB:       ${POSTGRES_DB}
     ports:
-      - "5433:5432"    # porta externa 5433 preservada do compose anterior
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data        # volume existente preservado
-      - ./docker/init:/docker-entrypoint-initdb.d     # cria schemas bronze/silver/gold
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
@@ -70,7 +60,6 @@ services:
     networks:
       - anac_net
 
-  # ── Airflow Init ───────────────────────────────────────────────
   airflow-init:
     <<: *airflow-common
     container_name: airflow_init
@@ -78,8 +67,28 @@ services:
     command:
       - -c
       - |
-        # Aguarda PostgreSQL estar prônto
-        sleep 5
+        python -c "
+        import psycopg2, os, sys
+        try:
+            conn = psycopg2.connect(
+                host='postgres', port=5432,
+                user=os.environ['POSTGRES_USER'],
+                password=os.environ['POSTGRES_PASSWORD'],
+                dbname='postgres'
+            )
+            conn.autocommit = True
+            cur = conn.cursor()
+            cur.execute(\"SELECT 1 FROM pg_database WHERE datname='airflow'\")
+            if not cur.fetchone():
+                cur.execute('CREATE DATABASE airflow')
+                print('Banco airflow criado.')
+            else:
+                print('Banco airflow ja existe.')
+            conn.close()
+        except Exception as e:
+            print(f'Erro: {e}', file=sys.stderr)
+            sys.exit(1)
+        "
         airflow db migrate
         airflow users create \
           --username admin \
@@ -96,13 +105,12 @@ services:
           --conn-schema bronze \
           --conn-port 5432 \
           --conn-extra '{"sslmode": "disable"}' 2>/dev/null \
-                  || echo "Connection postgres_anac ja existe."
+          || echo "Connection postgres_anac ja existe."
     environment:
       <<: *airflow-common-env
       _AIRFLOW_DB_MIGRATE: "true"
     restart: "no"
 
-  # ── Airflow Webserver ──────────────────────────────────────────
   airflow-webserver:
     <<: *airflow-common
     container_name: airflow_webserver
@@ -119,7 +127,6 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-  # ── Airflow Scheduler ──────────────────────────────────────────
   airflow-scheduler:
     <<: *airflow-common
     container_name: airflow_scheduler
@@ -136,7 +143,7 @@ services:
         condition: service_completed_successfully
 
 volumes:
-  postgres_data:    # volume existente — dados preservados entre up/down
+  postgres_data:
 
 networks:
   anac_net:

@@ -1,39 +1,28 @@
-#  Manipulação de dados
-pandas==2.2.0
-numpy==1.26.4
-pyarrow>=14.0.1          # backend Parquet para pandas e polars
+# =================================================================
+# requirements.txt — pacotes EXTRAS além do que já vem no Airflow
+# A imagem apache/airflow:2.9.1 já inclui: pandas, numpy, sqlalchemy
+# Aqui instalamos apenas o que não vem na imagem base.
+# =================================================================
 
-# Detecção de encoding
+#  Processamento de dados (não incluídos na imagem base)
+pyarrow>=14.0.1
 chardet==5.2.0
 
-# Banco de dados
-sqlalchemy==2.0.23
+#  Banco de dados
 psycopg2-binary==2.9.12
 
-# dbt
-# 1.9.x é o último stable sem o conflito de protobuf do 1.10+
+#  dbt
 dbt-core==1.9.8
 dbt-postgres==1.9.1
 
-# Astronomer Cosmos
-# Cosmos 1.4.0 só suporta até dbt-core 1.8.x
-# CORRIGIDO: 1.8.0 é compatível com dbt-core 1.10.x
+#  Astronomer Cosmos
 astronomer-cosmos==1.8.0
 
-# Airflow providers
+#  Airflow providers
 apache-airflow-providers-postgres==5.10.0
 
-# Variáveis de ambiente
-python-dotenv==1.0.1     # CORRIGIDO: 1.2 não existe, versão estável é 1.0.1
-
-# Logging
+#  Variáveis de ambiente e logging
+python-dotenv==1.0.1
 loguru==0.7.2
 
-# Processamento
-# duckdb>=1.0.0
-
-#  Development (descomente quando precisar)
-# pytest==7.4.3
-# black==23.12.1
-# isort==5.13.2
-# flake8==6.1.0
+msgpack>=1.0.0

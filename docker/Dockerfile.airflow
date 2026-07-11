@@ -7,7 +7,6 @@ FROM apache/airflow:2.9.1-python3.12
 
 USER root
 
-# Dependências de sistema para psycopg2, dbt e compilação
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
@@ -19,7 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 USER airflow
 
-# Instala Cosmos, dbt e dependeréncias do projeto
-# Usa requirements-docker.txt que é otimizado para a imagem Airflow
-COPY requirements-docker.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+# Copia e instala apenas os pacotes extras do projeto.
+# O Airflow já está instalado na imagem base — não reinstalar.
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir \
+    -r /tmp/requirements.txt

@@ -4,7 +4,7 @@ Pipeline ELT automatizado para processar arquivos de dados da ANAC (Agência Nac
 
 ![img](https://i.postimg.cc/XYggYxT1/Projeto-ANAC.png)
 
-## 📋 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 python_pipeline_anac/
@@ -178,7 +178,7 @@ python scripts/load.py
 2. **Carregar dados manualmente** (primeira execução):
    - Coloque arquivos CSV em `./data/`
    - Acesse **DAGs → dag_ingestao_anac**
-   - Clique no botão ▶️ (Trigger DAG)
+   - Clique no botão (Trigger DAG)
    - Monitore em **Graph** → **Tree View**
 
 3. **Schedule automático**:
@@ -315,7 +315,7 @@ docker compose up -d
 
 ### "PostgreSQL não inicializa"
 
-Limpar volumes (⚠️ **deleta dados**):
+Limpar volumes (**deleta dados**):
 ```bash
 docker compose down -v
 docker compose up -d
@@ -326,11 +326,11 @@ docker compose up -d
 ## Segurança
 
 **IMPORTANTE:**
-- ✅ Nunca commite `.env` com credenciais reais
-- ✅ Use variáveis de ambiente em produção
-- ✅ Considere secrets management (AWS Secrets, HashiCorp Vault)
-- ✅ Revise logs regularmente (podem conter dados sensíveis)
-- ✅ Configure firewall para restringir acesso ao Airflow (8080)
+- Nunca commite `.env` com credenciais reais
+- Use variáveis de ambiente em produção
+- Considere secrets management (AWS Secrets, HashiCorp Vault)
+- Revise logs regularmente (podem conter dados sensíveis)
+- Configure firewall para restringir acesso ao Airflow (8080)
 
 ---
 

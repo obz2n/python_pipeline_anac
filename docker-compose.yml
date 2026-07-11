@@ -25,6 +25,7 @@ x-airflow-common: &airflow-common
     POSTGRES_USER:     ${POSTGRES_USER}
     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   volumes:
+    - ./dbt_venv:/opt/airflow/dbt-venv
     - ./dags:/opt/airflow/dags
     - ./scripts:/opt/airflow/scripts
     - ./dbt:/opt/airflow/dbt
@@ -144,6 +145,7 @@ services:
 
 volumes:
   postgres_data:
+  dbt_venv:
 
 networks:
   anac_net:

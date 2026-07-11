@@ -1,28 +1,26 @@
 # =================================================================
-# requirements.txt — pacotes EXTRAS além do que já vem no Airflow
-# A imagem apache/airflow:2.9.1 já inclui: pandas, numpy, sqlalchemy
-# Aqui instalamos apenas o que não vem na imagem base.
+# requirements.txt — pacotes da imagem Airflow
+#
+# dbt-core e dbt-postgres foram REMOVIDOS daqui.
+# O Cosmos instala o dbt num virtualenv isolado em runtime,
+# evitando o conflito ResolutionTooDeep com dbt-adapters.
 # =================================================================
 
-#  Processamento de dados (não incluídos na imagem base)
+#  Processamento de dados
+polars==0.20.31
 pyarrow>=14.0.1
 chardet==5.2.0
 
 #  Banco de dados
 psycopg2-binary==2.9.12
 
-#  dbt
-dbt-core==1.9.8
-dbt-postgres==1.9.1
-
-#  Astronomer Cosmos
+#  Astronomer Cosmos (sem dbt — dbt vai no virtualenv)
 astronomer-cosmos==1.8.0
 
 #  Airflow providers
 apache-airflow-providers-postgres==5.10.0
 
-#  Variáveis de ambiente e logging
+#  Utilitários
 python-dotenv==1.0.1
 loguru==0.7.2
-
 msgpack>=1.0.0

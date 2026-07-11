@@ -309,6 +309,7 @@ Reconstruir imagem Docker:
 ```bash
 docker compose down
 docker compose build --no-cache
+docker compose up airflow-init
 docker compose up -d
 ```
 

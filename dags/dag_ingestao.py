@@ -55,6 +55,16 @@ def executar_load_fn(**context) -> None:
     load = importlib.import_module("load")
     load.processar_carga(load.PARQUET_FILES)
 
+# Alternativa de load com xcom
+'''
+def executar_load_fn(**context) -> None:
+    ti = context["ti"]
+    parquet_files = ti.xcom_pull(key="parquet_files", task_ids="verificar_arquivos") or []
+    path = assert_script_exists("load")
+    load = import_module_from_path("load", path)
+    load.processar_carga(parquet_files)
+'''
+
 
 with DAG(
     dag_id="dag_ingestao_anac",

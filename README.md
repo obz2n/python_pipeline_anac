@@ -245,12 +245,6 @@ Contém todas as dependências para rodar scripts Python localmente:
 - chardet, loguru, python-dotenv
 - apache-airflow (optional)
 
-### Arquivo `requirements-docker.txt` (Airflow Docker)
-Otimizado para a imagem `apache/airflow:2.9.1-python3.12`:
-- Inclui **Astronomer Cosmos** (dbt no Airflow)
-- Exclui apache-airflow (já vem na imagem)
-- Versões relaxadas para compatibilidade
-
 **Instalação no Docker** (automática):
 ```bash
 docker compose up -d

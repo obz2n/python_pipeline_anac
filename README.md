@@ -243,7 +243,7 @@ Contém todas as dependências para rodar scripts Python localmente:
 - sqlalchemy, psycopg2
 - duckdb, pyarrow
 - chardet, loguru, python-dotenv
-- apache-airflow (opcional)
+- apache-airflow (optional)
 
 **Instalação no Docker** (automática):
 ```bash

@@ -10,6 +10,7 @@
 polars==0.20.31
 pyarrow>=14.0.1
 chardet==5.2.0
+duckdb==0.10.0
 
 #  Banco de dados
 psycopg2-binary==2.9.12

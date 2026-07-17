@@ -19,7 +19,7 @@ python_pipeline_anac/
 │   │   ├── silver/            # Limpeza e enriquecimento
 │   │   └── gold/              # Agregações para BI
 │   └── seeds/                 # Dados de referência (aeroportos)
-├── scripts/                   # Scripts de ETL (Python)
+├── src/                       # Scripts de ETL (Python)
 │   ├── extract.py             # Converte CSV → Parquet
 │   └── load.py                # Carrega Parquet → PostgreSQL
 ├── data/                      # CSVs originais da ANAC
